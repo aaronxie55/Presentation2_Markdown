@@ -2,7 +2,7 @@
 
 ### Introduction
 
-Barely a month ago, from the 5.11.3 release version of Linux kernel had been discoverd a vulnerability called **Linux Kernel Heap Buffer Overflow**. The CVE code indicated this vulnerbility is **CVE-2021-27365**.
+Barely a month ago, from the 5.11.3 release version of Linux kernel had been discoverd a vulnerability called **Linux Kernel Heap Buffer Overflow**. The CVE code indicated this vulnerability is **CVE-2021-27365**.
 
 + **Type of Vulnerability:** Heap Buffer Overflow
 + **Where it is found:** iscsi_host_get_param() in drivers/scsi/libiscsi.c
@@ -11,7 +11,7 @@ Barely a month ago, from the 5.11.3 release version of Linux kernel had been dis
 + **CVSS Version 3.x score:** 7.8 (High)
 ---
 
-The statement of this exploit declear that certain *iSCSI data structures* do not have appropriate length constraints set up, which can cause the *PAGE_SIZE* value in the structures exceed the limit and lead to buffer overflow.
+The statement of this vulnerability declares that certain *iSCSI data structures* do not have appropriate length constraints set up, which can cause the *PAGE_SIZE* value in the structures to exceed the limit and lead to a buffer overflow.
 
 *iSCSI* is a transport layer protocol that provides block-level access to storage devices by carrying SCSI commands over a TCP/IP network.
 
@@ -19,9 +19,12 @@ The statement of this exploit declear that certain *iSCSI data structures* do no
 An unauthorised user with this vulnerability can send a pre-adjusted Netlink message that is associated with iSCSI. This Netlink message had been set to the maximum length to causing the heap overflow. Then the attacker would use this to execute an arbitrary code or launch a denial of service attack.
 
 #### Fun Fact
-Although the vulnerability was recently discovered, this bug has been present since 2006 when it was first introduced during the development of the iSCSI subsystem.
+Although the vulnerability was recently discovered, this bug has been present since 2006, when it was first introduced during the development of the iSCSI subsystem.
 
 ### Technical Analysis
----
 
-This vulnerability is a heap buffer overflow found in the iSCSI subsystem. The vulnerability is exposed by setting an iSCSI string attribute to a value larger than one page, and then trying to read it.
+This vulnerability is a heap buffer overflow found in the iSCSI subsystem. The vulnerability is exposed by setting an iSCSI string attribute to a value larger than one page and then trying to read it.
+
+--- 
+
+Examining what the code contains, we see that a **sprintf** call, *a function that assumes an arbitrarily long string*, is used on the user-provided value with a buffer of a single page.  This is used for the seq file, a file that backs the iscsi attribute.
