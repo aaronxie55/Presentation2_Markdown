@@ -28,3 +28,10 @@ This vulnerability is a heap buffer overflow found in the iSCSI subsystem. The v
 --- 
 
 Examining what the code contains, we see that a **sprintf** call, *a function that assumes an arbitrarily long string*, is used on the user-provided value with a buffer of a single page.  This is used for the seq file, a file that backs the iscsi attribute.
+
+Knowing this vulnerability, an unprivileged user is able to forward Netlink messages to the iSCSI subsystem, which then sets attributes related to the iSCSI connection, such as hostname, username, etc., through the helper functions in *drivers/scsi/libiscsi.c*. The size of the limitation of these attributes is configured only by the maximum length of a Netlink message. Then the *sysfs and seqfs subsystem* will be used to read these attributes. However, it will only distribute a buffer of the *PAGE_SIZE* **(single_open in fs/seq_file.c, called when the sysfs file is opened)**.
+
+![vuln](https://user-images.githubusercontent.com/70997275/112740216-2325da80-8f49-11eb-8dec-510ebd6f1fa1.png)
+
+*Image from the “New Old Bugs in the Linux Kernel” Article on the Grimm blog by Adam March 12, 2021*
+
