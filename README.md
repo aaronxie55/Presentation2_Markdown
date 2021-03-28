@@ -49,7 +49,7 @@ An exploit was developed by the authors of the Grimm Blog showing the implementa
 
 The first information leak is from *a non-null terminated heap buffer*. When the function `iscsi_switch_str_param` setting up an iSCSI string attribute, another function `kstrdup` will be called, and it uses `new_val_buf`, which is a user-provided input.
 ```c
-##code for function iscsi_switch_str_param
+/*code for function iscsi_switch_str_param*/
 int iscsi_switch_str_param(char **param, char *new_val_buf)
 {
   char *new_val;
@@ -71,7 +71,7 @@ The exploit uses this information leak by declaring a string of 656 bytes. This 
 After setting up the string, the exploit can get the address of `kstrdup` function by reading back the pre-adjusted attribute. 
 Then the exploit can calculate the *kernel slide* by subtracting off the base address of the `netlink_sock_destruct`. The allocation will then set the `netlink_sock_destruct` function point to another function `__netlink_create` which is part of sending a Netlink message.
 ```c
-##code for function int __netlink_create
+/*code for function int __netlink_create*/
 static int __netlink_create(struct net *net, struct socket *sock,
 			    struct mutex *cb_mutex, int protocol,
 			    int kern)
