@@ -11,6 +11,13 @@ Barely a month ago, from the 5.11.3 release version of Linux kernel had been dis
 + **Impact:** Privilege escalation, Information Leak, Denial of Service
 + **CVSS Version 3.x score:** 7.8 (High)
 
+| Overall Score       		| 7.8           |
+|:------------------------------|:-------------:|
+| Base Score       		| 7.8           |
+| Impact subscore 		| 5.9           |
+| Exploitability subscore       | 1.8           |
+
+
 ---
 
 The statement of this vulnerability declares that certain *iSCSI data structures* do not have appropriate length constraints set up, which can cause the *PAGE_SIZE* value in the structures to exceed the limit and lead to a buffer overflow.
@@ -103,6 +110,13 @@ static int __netlink_create(struct net *net, struct socket *sock,
 The second information leak gains the address of the target module’s `iscsi_transport` structure by using the *Linux Kernel Out-of-Bounds Read* vulnerability. The `iscsi_transport` structure is used to define the operations between transportation, like the iSCSI requests. 
 
 Because this `iscsi_transport` structure is in the global region of the target kernel module, the exploit then can use this information leak to get the kernel module's address and the variables in the address. 
+
+----
+There are four more steps for the exploit including 
++ Obtaining a Kernel Write Primitive
++ Target Selection and Exploitation
++ Obtaining a Stable Kernel Read/Write Primitive
++ Privilege Escalation
 
 ## Impact
 
