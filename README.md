@@ -107,7 +107,7 @@ static int __netlink_create(struct net *net, struct socket *sock,
 }
 ```
 
-The second information leak gains the address of the target module’s `iscsi_transport` structure by using the *Linux Kernel Out-of-Bounds Read* vulnerability. The `iscsi_transport` structure is used to define the operations between transportation, like the iSCSI requests. 
+The second information leak gains the address of the target module’s `iscsi_transport` structure by using the *Linux pointer leak to userspace* vulnerability. The `iscsi_transport` structure is used to define the operations between transportation, like the iSCSI requests. 
 
 Because this `iscsi_transport` structure is in the global region of the target kernel module, the exploit then can use this information leak to get the kernel module's address and the variables in the address. 
 
