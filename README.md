@@ -72,7 +72,7 @@ int iscsi_switch_str_param(char **param, char *new_val_buf)
   return 0;
 }
 ```
-However, when allocated, the buffer that including the user-provided input is not initialized. Moreover, the kernel does not enforce the buffer termination when the user’s input is NULL. It turns out; the `kstrdup` function will take all the non-NULL bytes after the user input. And this value can be retrieved by reading the attribute c later.
+However, when allocated, the buffer that included the user-provided input is not initialized. Moreover, the kernel does not enforce the buffer termination when the user’s input is NULL. It turns out; the `kstrdup` function will take all the non-NULL bytes after the user input. And this value can be retrieved by reading the attribute c later.
 
 The exploit uses this information leak by declaring a string of 656 bytes. This string will be store in the address of the `netlink_sock_destruct`, which is a string included in the `kstrdup`.
 After setting up the string, the exploit can get the address of `kstrdup` function by reading back the pre-adjusted attribute. 
